@@ -20,6 +20,11 @@ const SignInPage = () => {
 
 
 
+    //  const formData = new FormData(e.currentTarget);
+    // const data= Object.fromEntries(formData.entries());
+
+
+
   const handleGoogleSignIn =async()=>{
     const data = await authClient.signIn.social({
       provider:"google"

@@ -2,6 +2,7 @@
 
 
 
+import { authClient } from "@/lib/auth-client";
 import {
   Button,
   Description,
@@ -13,17 +14,50 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+import { redirect } from "next/navigation";
 
 const SignUpPage = () => {
-  const onSubmit = (e) => {
+  const onSubmit = async(e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = {};
-    formData.forEach((value, key) => {
-      data[key] = value.toString();
-    });
+    const user= Object.fromEntries(formData.entries());
+   
+   const {data,error}=await authClient.signUp.email({
+    ...user,callbackURL:"/"
+   })
+   if(data){
+    redirect("/")
+   }
+   if (error){
+    console.log(error)
+   }
     alert("Akount sothikvabe toiri hoyeche!");
   };
+
+    //  const formData = new FormData(e.currentTarget);
+    // const data = Object.fromEntries(formData.entries());
+    //  const { data :resData , error
+    //  } = await signUp.email({
+    //     name : data.name,
+    //     email : data.email,
+    //     password : data.password
+    //  })
+    
+
+
+    const handleGoogleSignIn =async()=>{
+      const data = await authClient.signIn.social({
+        provider:"google"
+      });
+    };
+  
+  
+      const handleGithubSignIn =async()=>{
+      const data = await authClient.signIn.social({
+        provider:"github"
+      });
+    };
+
 
   return (
     <div className="w-full bg-[#f4f7f4] py-12 px-4 flex justify-center items-center">
@@ -104,13 +138,13 @@ const SignUpPage = () => {
         </div>
 
         <div className="space-y-3">
-          <Button
+          <Button   onClick={handleGoogleSignIn}
             type="button"
             className="w-full flex items-center justify-center gap-2 rounded-xl border border-neutral-300 bg-white py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-all shadow-sm"
           >
             <span>Google দিয়ে চালিয়ে যান</span>
           </Button>
-          <Button
+          <Button  onClick={handleGithubSignIn}
             type="button"
             className="w-full flex items-center justify-center gap-2 rounded-xl border border-neutral-300 bg-white py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-all shadow-sm"
           >
