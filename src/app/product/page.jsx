@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { cacheLife } from "next/cache";
 
 export default function ProductPage() {
+  "use cache";
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://api.api-store.workers.dev/api/bazardor/products")
+    fetch("https://api.abcz.workers.dev/api/bazardor/products")
       .then((res) => res.json())
       .then((data) => {
         const items = Array.isArray(data) ? data : data.items || [];

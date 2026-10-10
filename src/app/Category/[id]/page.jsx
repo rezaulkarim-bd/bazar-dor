@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cacheLife } from "next/cache";
 
 const CategoryPage = async ({ params }) => {
+    "use cache";
   const { id } = await params;
 
   // ক্যাটাগরি ও সংশ্লিষ্ট পণ্যের ডেটা ফেচ করা

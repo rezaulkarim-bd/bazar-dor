@@ -1,8 +1,9 @@
 import Link from 'next/link';
+import { cacheLife } from "next/cache";
 
 const getProductDetail = async (productId) => {
     try {
-        const res = await fetch(`https://api.api-store.workers.dev/api/bazardor/products/${productId}`);
+        const res = await fetch(`https://api.abcz.workers.dev/api/bazardor/products/${productId}`);
         if (!res.ok) return null;
         return await res.json();
     } catch (error) {
@@ -12,6 +13,7 @@ const getProductDetail = async (productId) => {
 };
 
 export default async function ProductDetailPage({ params }) {
+  "use cache";
   const { productId } = await params;
   const rawProduct = await getProductDetail(productId);
 
