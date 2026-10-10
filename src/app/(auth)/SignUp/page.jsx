@@ -14,6 +14,7 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const SignUpPage = () => {
@@ -34,15 +35,6 @@ const SignUpPage = () => {
     alert("Akount sothikvabe toiri hoyeche!");
   };
 
-    //  const formData = new FormData(e.currentTarget);
-    // const data = Object.fromEntries(formData.entries());
-    //  const { data :resData , error
-    //  } = await signUp.email({
-    //     name : data.name,
-    //     email : data.email,
-    //     password : data.password
-    //  })
-    
 
 
     const handleGoogleSignIn =async()=>{
@@ -157,9 +149,9 @@ const SignUpPage = () => {
         </p>
 
         <div className="mt-4 text-center">
-          <a href="/" className="text-xs text-neutral-500 hover:text-neutral-800 transition-colors">
-            ← হোম পেজে ফিরে যান
-          </a>
+  <Link href="/" className="text-xs text-neutral-500 hover:text-neutral-800 transition-colors">
+  ← হোম পেজে ফিরে যান
+</Link>
         </div>
       </div>
     </div>

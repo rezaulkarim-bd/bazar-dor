@@ -27,7 +27,7 @@
 import Link from "next/link";
 import { cacheLife } from "next/cache";
 
-const API_URL = "https://api.abcz.workers.dev/api/bazardor/categories";
+const API_URL = "https://openapi.programming-hero.com/api/bazardor/categories";
 
 const NavLinks = async () => {
   "use cache";

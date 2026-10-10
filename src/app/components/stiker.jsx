@@ -13,7 +13,7 @@ import { cacheLife } from "next/cache"
 const Stiker = async() => {
       "use cache"
   cacheLife("hours")
-    const res = await fetch("https://api.api-store.workers.dev/api/bazardor/products")
+    const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products")
     const data = await res.json()
     // const Headlines = data.nameBn
     return (

@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import { cacheLife } from "next/cache";
 
 const getProductDetail = async (productId) => {
     try {
-        const res = await fetch(`https://api.abcz.workers.dev/api/bazardor/products/${productId}`);
+        const res = await fetch(`https://api.api-store.workers.dev/api/bazardor/products/${productId}`);
         if (!res.ok) return null;
         return await res.json();
     } catch (error) {
@@ -13,43 +12,47 @@ const getProductDetail = async (productId) => {
 };
 
 export default async function ProductDetailPage({ params }) {
-  "use cache";
   const { productId } = await params;
   const rawProduct = await getProductDetail(productId);
 
+  // যদি API থেকে সরাসরি ডেটা না আসে, তবে productId থেকে নাম সাজিয়ে ফলব্যাক তৈরি হবে
+  const formattedName = decodeURIComponent(productId || "")
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, l => l.toUpperCase());
+
   const product = rawProduct ? {
-    name: rawProduct.nameBn || rawProduct.name || "বাটাম সাইজ চাল",
-    category: rawProduct.category || "চাল",
+    name: rawProduct.nameBn || rawProduct.name || formattedName,
+    category: rawProduct.category || "বাজারের পণ্য",
     unit: rawProduct.unit || "প্রতি কেজি",
-    emoji: rawProduct.emoji || "🍚",
-    todayPrice: rawProduct.price || rawProduct.todayPrice || "৬৬ টাকা",
-    change: typeof rawProduct.change === 'object' ? `${rawProduct.change.dir || ''} ${rawProduct.change.pct || ''}` : (rawProduct.change || "▲ ৩.৫%"),
-    minPrice: rawProduct.minPrice || "৫৯ টাকা",
-    minMarket: rawProduct.minMarket || "সরাইর ক্রয় খামার বাজার",
-    maxPrice: rawProduct.maxPrice || "৭৩ টাকা",
-    maxMarket: rawProduct.maxMarket || "সবচেয়ে বেশি দামের বাজার",
-    avgPrice: rawProduct.avgPrice || "৬৬ টাকা",
+    emoji: rawProduct.emoji || "🛒",
+    todayPrice: rawProduct.price || rawProduct.todayPrice || "১০০ টাকা",
+    change: typeof rawProduct.change === 'object' ? `${rawProduct.change.dir || ''} ${rawProduct.change.pct || ''}` : (rawProduct.change || "▲ ২.০%"),
+    minPrice: rawProduct.minPrice || "৯৫ টাকা",
+    minMarket: rawProduct.minMarket || "কারওয়ান বাজার",
+    maxPrice: rawProduct.maxPrice || "১০৫ টাকা",
+    maxMarket: rawProduct.maxMarket || "নিউ মার্কেট",
+    avgPrice: rawProduct.avgPrice || "১০০ টাকা",
     avgDesc: rawProduct.avgDesc || "প্রতি কেজি-র গড় সীমা",
     markets: rawProduct.markets || [
-      { name: "টাউন বাজার", division: "ময়মনসিংহ", min: "৫৯ টাকা", max: "৬৭ টাকা", avg: "৬২ টাকা" },
-      { name: "সদর বাজার", division: "রাজশাহী", min: "৬০ টাকা", max: "৬৩ টাকা", avg: "৬৩ টাকা" }
+      { name: "কারওয়ান বাজার", division: "ঢাকা", min: "৯৫ টাকা", max: "১০২ টাকা", avg: "৯৮ টাকা" },
+      { name: "টাউন বাজার", division: "চট্টগ্রাম", min: "৯৮ টাকা", max: "১০৫ টাকা", avg: "১০১ টাকা" }
     ]
   } : {
-    name: "বাটাম সাইজ চাল",
-    category: "চাল",
+    name: formattedName || "বাজারের পণ্য",
+    category: "সাধারণ পণ্য",
     unit: "প্রতি কেজি",
-    emoji: "🍚",
-    todayPrice: "৬৬ টাকা",
-    change: "▲ ৩.৫%",
-    minPrice: "৫৯ টাকা",
-    minMarket: "সরাইর ক্রয় খামার বাজার",
-    maxPrice: "৭৩ টাকা",
-    maxMarket: "সবচেয়ে বেশি দামের বাজার",
-    avgPrice: "৬৬ টাকা",
+    emoji: "🛒",
+    todayPrice: "১১০ টাকা",
+    change: "▲ ২.৫%",
+    minPrice: "১০০ টাকা",
+    minMarket: "সদর বাজার",
+    maxPrice: "১২০ টাকা",
+    maxMarket: "সিটি বাজার",
+    avgPrice: "১১০ টাকা",
     avgDesc: "প্রতি কেজি-র গড় সীমা",
     markets: [
-      { name: "টাউন বাজার", division: "ময়মনসিংহ", min: "৫৯ টাকা", max: "৬৭ টাকা", avg: "৬২ টাকা" },
-      { name: "সদর বাজার", division: "রাজশাহী", min: "৬০ টাকা", max: "৬৩ টাকা", avg: "৬৩ টাকা" }
+      { name: "সদর বাজার", division: "ঢাকা", min: "১০০ টাকা", max: "১১৫ টাকা", avg: "১০৮ টাকা" },
+      { name: "সিটি বাজার", division: "রাজশাহী", min: "১০৫ টাকা", max: "১২০ টাকা", avg: "১১৩ টাকা" }
     ]
   };
 

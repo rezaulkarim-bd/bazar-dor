@@ -119,9 +119,9 @@ const SignInPage = () => {
             </div>
 
             <div className="mt-4 text-center">
-              <Link> href="/"className="text-xs text-neutral-500 hover:text-neutral-800 transition-colors">
-                ← হোম পেজে ফিরে যান
-            </Link>
+             <Link href="/" className="text-xs text-neutral-500 hover:text-neutral-800 transition-colors">
+       ← হোম পেজে ফিরে যান
+          </Link>
             </div>
           </div>
         </div>

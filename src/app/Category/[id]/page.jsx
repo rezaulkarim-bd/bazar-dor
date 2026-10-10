@@ -1,16 +1,16 @@
 import Link from "next/link";
-import { cacheLife } from "next/cache";
+// import { cacheLife } from "next/cache";
 
 const CategoryPage = async ({ params }) => {
-    "use cache";
+    // "use cache";
   const { id } = await params;
 
   // ক্যাটাগরি ও সংশ্লিষ্ট পণ্যের ডেটা ফেচ করা
-  const res = await fetch(`https://api.api-store.workers.dev/api/bazardor/categories/${id}`);
+  const res = await fetch(`https://openapi.programming-hero.com/api/bazardor/categories/${id}`);
   const categoryData = await res.json();
 
   // বিকল্প হিসেবে ক্যাটাগরি ফিল্টার করে প্রোডাক্ট ফেচ করা যেতে পারে
-  const prodRes = await fetch(`https://api.api-store.workers.dev/api/bazardor/products?category=${id}`);
+  const prodRes = await fetch(`https://openapi.programming-hero.com/api/bazardor/products?category=${id}`);
   const prodData = await prodRes.json().catch(() => []);
 
   const categoryName = categoryData?.nameBn || categoryData?.name || "মাংস";
