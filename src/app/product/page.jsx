@@ -11,9 +11,6 @@ export default function ProductPage() {
 
   useEffect(() => {
     fetch("https://openapi.programming-hero.com/api/bazardor/products")
-
-
-    
       .then((res) => res.json())
       .then((data) => {
         const items = Array.isArray(data) ? data : data.items || [];
@@ -41,9 +38,22 @@ export default function ProductPage() {
     const trend = String(item.trend || "").toLowerCase();
     const isUp = trend === "up" || trend === "positive" || dir.includes("▲") || dir.includes("+") || dir.toLowerCase().includes("up");
     const isDown = trend === "down" || trend === "negative" || dir.includes("▼") || dir.includes("-") || dir.toLowerCase().includes("down");
-    const text = typeof change === 'object' && change !== null ? `${dir} ${pct}`.trim() : String(change || "—০.০%");
 
-    return { text: text || "—০.০%", isUp, isDown, isFlat: !isUp && !isDown };
+    // Arrow and % symbol formatting
+    let arrow = isUp ? "▲ " : isDown ? "▼ " : "";
+    let rawVal = pct || dir.replace(/[^0-9.-]/g, "") || "০.০";
+    
+    // Ensure % at the end if not present
+    let formattedPct = rawVal.endsWith("%") ? rawVal : `${rawVal}%`;
+    let text = `${arrow}${formattedPct}`;
+
+    return { text, isUp, isDown, isFlat: !isUp && !isDown };
+  };
+
+  const formatUnit = (unit) => {
+    if (!unit) return "প্রতি কেজি";
+    if (unit.toLowerCase() === "kg" || unit.toLowerCase() === "কেজি") return "প্রতি কেজি";
+    return unit;
   };
 
   const filteredRisers = products.filter(p => parseChange(p).isUp);
@@ -64,29 +74,6 @@ export default function ProductPage() {
     <div className="min-h-screen bg-[#f4f7f4] py-8 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto space-y-10">
 
-        {/* Hero Section */}
-        <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-10 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-3 text-center md:text-left">
-            <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">
-              শনিবার, ১০ অক্টোবর ২০২৬
-            </span>
-            <h1 className="text-2xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight">
-              আজকের বাজারের দাম এক নজরে
-            </h1>
-            <p className="text-xs sm:text-sm text-neutral-500 max-w-xl">
-              চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার বাজার — বাজারভিত্তিক বিস্তারিত দাম, গড়, সর্বনিম্ন ও সর্বাধিক দামের সঠিক পরিবর্তন এক পলক দেখায়।
-            </p>
-            <div className="pt-2">
-              <Link href="#all-products" className="inline-block rounded-xl bg-emerald-600 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-md hover:bg-emerald-700 transition-all">
-                সব পণ্য দেখুন
-              </Link>
-            </div>
-          </div>
-          <div className="w-40 sm:w-56 h-auto flex-shrink-0">
-            <div className="text-6xl sm:text-8xl text-center">🛒</div>
-          </div>
-        </div>
-
         {/* Section A — আজ দাম বেড়েছে ▲ */}
         <div className="space-y-4">
           <h2 className="text-lg font-bold text-neutral-900 flex items-center gap-2">
@@ -102,14 +89,17 @@ export default function ProductPage() {
                   className="bg-white border border-neutral-200 rounded-2xl p-4 shadow-sm hover:border-emerald-600 transition-all flex flex-col justify-between gap-3"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{item.emoji || "📦"}</span>
+                    <span className="text-2xl">{item.image}</span>
                     <div>
                       <h3 className="font-bold text-neutral-900 text-sm sm:text-base">{item.nameBn || item.name}</h3>
-                      <p className="text-xs text-neutral-500">{item.unit}</p>
+                      <p className="text-xs text-neutral-500">{formatUnit(item.unit)}</p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between pt-2 border-t border-neutral-100 text-xs">
-                    <span className="text-neutral-500">আজকের দাম</span>
+                    <div>
+                      <span className="text-neutral-500 block">আজকের দাম</span>
+                      <span className="text-xs font-bold text-neutral-800">{item.today} টাকা</span>
+                    </div>
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-neutral-900 text-sm">{item.price || item.todayPrice}</span>
                       <span className="text-emerald-600 font-bold">{parsed.text}</span>
@@ -136,14 +126,17 @@ export default function ProductPage() {
                   className="bg-white border border-neutral-200 rounded-2xl p-4 shadow-sm hover:border-emerald-600 transition-all flex flex-col justify-between gap-3"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{item.emoji || "📦"}</span>
+                    <span className="text-2xl">{item.image}</span>
                     <div>
                       <h3 className="font-bold text-neutral-900 text-sm sm:text-base">{item.nameBn || item.name}</h3>
-                      <p className="text-xs text-neutral-500">{item.unit}</p>
+                      <p className="text-xs text-neutral-500">{formatUnit(item.unit)}</p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between pt-2 border-t border-neutral-100 text-xs">
-                    <span className="text-neutral-500">আজকের দাম</span>
+                    <div>
+                      <span className="text-neutral-500 block">আজকের দাম</span>
+                      <span className="text-xs font-bold text-neutral-800">{item.today} টাকা</span>
+                    </div>
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-neutral-900 text-sm">{item.price || item.todayPrice}</span>
                       <span className="text-rose-600 font-bold">{parsed.text}</span>
@@ -171,14 +164,17 @@ export default function ProductPage() {
                   className="bg-white border border-neutral-200 rounded-2xl p-4 shadow-sm hover:border-emerald-600 transition-all flex flex-col justify-between gap-3"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{item.emoji || "📦"}</span>
+                    <span className="text-2xl">{item.image}</span>
                     <div>
                       <h3 className="font-bold text-neutral-900 text-sm sm:text-base">{item.nameBn || item.name}</h3>
-                      <p className="text-xs text-neutral-500">{item.unit}</p>
+                      <p className="text-xs text-neutral-500">{formatUnit(item.unit)}</p>
                     </div>
                   </div>
                   <div className="flex items-center justify-between pt-2 border-t border-neutral-100 text-xs">
-                    <span className="text-neutral-500">আজকের দাম</span>
+                    <div>
+                      <span className="text-neutral-500 block">আজকের দাম</span>
+                      <span className="text-xs font-bold text-neutral-800">{item.today} টাকা</span>
+                    </div>
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-neutral-900 text-sm">{item.price || item.todayPrice}</span>
                       <span className={`font-bold ${parsed.isUp ? 'text-emerald-600' : parsed.isDown ? 'text-rose-600' : 'text-neutral-400'}`}>

@@ -8,21 +8,21 @@ import toast from "react-hot-toast";
 export default function ProfilePage() {
   const router = useRouter();
   
-  // BetterAuth সেশন থেকে ইউজার ডেটা নেওয়া
+  
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
 
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ইউজার ডেটা লোড হলে ইনপুট স্টেট আপডেট করা
+ 
   useEffect(() => {
     if (user?.name) {
       setName(user.name);
     }
   }, [user]);
 
-  // প্রোফাইল আপডেট হ্যান্ডলার
+
   const handleUpdate = async (e) => {
     e.preventDefault();
     if (!name.trim()) {
@@ -32,7 +32,7 @@ export default function ProfilePage() {
 
     setLoading(true);
     try {
-      // BetterAuth ইউজার নেম আপডেট API
+   
       await authClient.updateUser({
         name: name,
       });
@@ -62,7 +62,7 @@ export default function ProfilePage() {
     }
   };
 
-  // সেশন লোডিং স্টেট
+  
   if (isPending) {
     return (
       <div className="min-h-screen bg-[#f4f7f4] flex items-center justify-center text-neutral-500 text-sm">
@@ -75,7 +75,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-[#f4f7f4] py-8 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto space-y-6">
         
-        {/* পেজ হেডার */}
+     
         <div className="space-y-1">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
             আমার প্রোফাইল
@@ -85,7 +85,7 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        {/* প্রোফাইল কার্ড ও সাইন আউট */}
+     
         <div className="bg-white border border-neutral-200 rounded-3xl p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4 w-full sm:w-auto">
             <div className="w-16 h-16 rounded-full overflow-hidden bg-neutral-100 border border-neutral-200 flex-shrink-0 flex items-center justify-center text-3xl">
@@ -114,7 +114,7 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        {/* তথ্য ও আপডেট ফর্ম */}
+       
         <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
           <h2 className="text-base sm:text-lg font-bold text-neutral-900">তথ্য</h2>
           

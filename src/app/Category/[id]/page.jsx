@@ -24,18 +24,17 @@ const CategoryPage = async ({ params }) => {
     <div className="min-h-screen bg-[#f4f7f4] py-8 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto space-y-6">
 
-        {/* ক্যাটাগরি হেডার ও ইউজার ইনফো সেকশন */}
+        {/* ক্যাটাগরি হেডার সেকশন */}
         <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <p className="text-xs text-neutral-500">rezaulkarim3659@gmail.com</p>
-              <div className="flex items-center gap-3 mt-1">
+              <div className="flex items-center gap-3">
                 <span className="text-3xl">{categoryIcon}</span>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
                   {categoryName}
                 </h1>
               </div>
-              <p className="text-xs text-neutral-500 mt-1">
+              <p className="text-xs text-neutral-500 mt-2">
                 প্রতি পণ্যের আজকের দাম ও পরিবর্তন
               </p>
             </div>
