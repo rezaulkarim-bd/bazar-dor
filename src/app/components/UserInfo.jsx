@@ -1,21 +1,94 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
-import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const UserInfo = () => {
   const { data: session } = authClient.useSession();
   const user = session?.user;
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const router = useRouter();
+
+  // বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হয়ে যাবে
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSignOut = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/SignIn");
+        },
+      },
+    });
+  };
 
   return (
-    <div>
+    <div className="relative" ref={dropdownRef}>
       {user ? (
-        <Link href={'/Profile'}>
-          <p className="font-semibold text-neutral-800 hover:text-emerald-600 transition-colors text-xs sm:text-sm truncate max-w-[120px] sm:max-w-none">
-            {user.name}
-          </p>    
-        </Link>
+        <div>
+          {/* ইউজার প্রোফাইল বাটন ও ড্রপডাউন অ্যারো */}
+          <button 
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex items-center gap-2 group cursor-pointer focus:outline-none"
+          >
+            {user.image ? (
+              <Image 
+                src={user.image} 
+                alt={user.name || "User"} 
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border border-neutral-200 shadow-sm"
+              />
+            ) : (
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs sm:text-sm shadow-sm">
+                {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+              </div>
+            )}
+            <span className="font-semibold text-neutral-800 group-hover:text-emerald-600 transition-colors text-xs sm:text-sm truncate max-w-[100px] sm:max-w-none">
+              {user.name ? user.name.split(" ")[0] : "User"}
+            </span>
+            <span className={`text-[10px] text-neutral-500 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}>
+              ▼
+            </span>
+          </button>
+
+          {/* ড্রপডাউন পপআপ মেনু */}
+          {isOpen && (
+            <div className="absolute right-0 mt-2 w-64 bg-white border border-neutral-200 rounded-2xl shadow-xl py-3 px-4 z-50 space-y-3">
+              <div className="border-b border-neutral-100 pb-3">
+                <p className="font-bold text-neutral-900 text-sm truncate">{user.name}</p>
+                <p className="text-xs text-neutral-500 truncate">{user.email}</p>
+              </div>
+
+              <div className="space-y-1">
+                <Link 
+                  href="/Profile" 
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-neutral-700 hover:text-emerald-600 hover:bg-neutral-50 p-2 rounded-xl transition-colors"
+                >
+                  <span>👤</span> আমার প্রোফাইল
+                </Link>
+
+                <button 
+                  onClick={handleSignOut}
+                  className="w-full flex items-center gap-2.5 text-xs sm:text-sm font-medium text-rose-600 hover:bg-rose-50 p-2 rounded-xl transition-colors text-left"
+                >
+                  <span>↪</span> সাইন আউট
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       ) : (
         <div className="flex items-center gap-2 sm:gap-4">
           <Link 
