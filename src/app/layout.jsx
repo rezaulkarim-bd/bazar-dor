@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "../app/components/Navbar";
 import Footer from "./components/Footer";
 import Stiker from "./components/stiker";
+import { Toaster } from "react-hot-toast";
 
 const notoSerifBengali =  Noto_Serif_Bengali({
   variable: "--font-geist-sans",
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
       className={`${notoSerifBengali.className}  h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <Toaster position="top-center" />
         <Navbar></Navbar>
          <Stiker></Stiker>
 

@@ -24,12 +24,12 @@ const SignInPage = () => {
 
       if (error) {
         console.error("Login error:", error);
-        toast.error(error.message || "লগইন ব্যর্থ হয়েছে! ইমেল বা পাসওয়ার্ড যাচাই করুন।");
+        toast.error(error.message || "লগইন ব্যর্থ হয়েছে! ইমেল বা পাসওয়ার্ড যাচাই করুন।");
         return;
       }
 
       if (data) {
-        toast.success("সফলভাবে সাইন ইন করা হয়েছে!");
+        toast.success("সফলভাবে সাইন ইন করা হয়েছে!");
         router.push("/");
       }
     } catch (err) {
@@ -45,7 +45,7 @@ const SignInPage = () => {
         callbackURL: "/",
       });
     } catch (err) {
-      toast.error("গুগল সাইন-ইন ব্যর্থ হয়েছে!");
+      toast.error("গুগল সাইন-ইন ব্যর্থ হয়েছে!");
     }
   };
 
@@ -56,15 +56,15 @@ const SignInPage = () => {
         callbackURL: "/",
       });
     } catch (err) {
-      toast.error("গিটহব সাইন-ইন ব্যর্থ হয়েছে!");
+      toast.error("গিটহব সাইন-ইন ব্যর্থ হয়েছে!");
     }
   };
 
   return (
-    <div className="w-full bg-[#f4f7f4] py-12 px-4 flex justify-center items-center">
+    <div className="w-full bg-[#f4f7f4] py-12 px-4 sm:px-6 flex justify-center items-center min-h-screen">
       <div className="max-w-md w-full">
         <div className="text-center mb-6">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight mb-2">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight mb-2">
             সাইন ইন
           </h1>
           <p className="text-xs sm:text-sm text-neutral-500">
@@ -72,7 +72,7 @@ const SignInPage = () => {
           </p>
         </div>
 
-        <div className="bg-white border border-neutral-200 rounded-3xl p-8 sm:p-10 shadow-sm">
+        <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-10 shadow-sm">
           <Form onSubmit={onSubmit} className="space-y-4">
             <TextField
               isRequired

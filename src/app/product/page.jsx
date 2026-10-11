@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-// import { cacheLife } from "next/cache";
+import ProductSkeleton from "@/app/components/ProductSkeleton";
 
 export default function ProductPage() {
-  // "use cache";
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -39,11 +38,8 @@ export default function ProductPage() {
     const isUp = trend === "up" || trend === "positive" || dir.includes("▲") || dir.includes("+") || dir.toLowerCase().includes("up");
     const isDown = trend === "down" || trend === "negative" || dir.includes("▼") || dir.includes("-") || dir.toLowerCase().includes("down");
 
-    // Arrow and % symbol formatting
     let arrow = isUp ? "▲ " : isDown ? "▼ " : "";
     let rawVal = pct || dir.replace(/[^0-9.-]/g, "") || "০.০";
-    
-    // Ensure % at the end if not present
     let formattedPct = rawVal.endsWith("%") ? rawVal : `${rawVal}%`;
     let text = `${arrow}${formattedPct}`;
 
@@ -64,22 +60,29 @@ export default function ProductPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f4f7f4] flex items-center justify-center text-neutral-500 text-sm">
-        লোড হচ্ছে...
+      <div className="min-h-screen bg-[#f4f7f4] py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto space-y-6">
+          <div className="space-y-4">
+            <h2 className="text-lg font-bold text-neutral-900 flex items-center gap-2">
+              <span className="text-emerald-600">▲</span> আজ দাম বেড়েছে (লোড হচ্ছে...)
+            </h2>
+            <ProductSkeleton />
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f4f7f4] py-8 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto space-y-10">
+    <div className="min-h-screen bg-[#f4f7f4] py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto space-y-10">
 
         {/* Section A — আজ দাম বেড়েছে ▲ */}
         <div className="space-y-4">
           <h2 className="text-lg font-bold text-neutral-900 flex items-center gap-2">
             <span className="text-emerald-600">▲</span> আজ দাম বেড়েছে
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {risers.map((item, index) => {
               const parsed = parseChange(item);
               return (
@@ -90,8 +93,8 @@ export default function ProductPage() {
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">{item.image}</span>
-                    <div>
-                      <h3 className="font-bold text-neutral-900 text-sm sm:text-base">{item.nameBn || item.name}</h3>
+                    <div className="min-w-0">
+                      <h3 className="font-bold text-neutral-900 text-sm sm:text-base truncate">{item.nameBn || item.name}</h3>
                       <p className="text-xs text-neutral-500">{formatUnit(item.unit)}</p>
                     </div>
                   </div>
@@ -116,7 +119,7 @@ export default function ProductPage() {
           <h2 className="text-lg font-bold text-neutral-900 flex items-center gap-2">
             <span className="text-rose-600">▼</span> আজ দাম কমেছে
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {fallers.map((item, index) => {
               const parsed = parseChange(item);
               return (
@@ -127,8 +130,8 @@ export default function ProductPage() {
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">{item.image}</span>
-                    <div>
-                      <h3 className="font-bold text-neutral-900 text-sm sm:text-base">{item.nameBn || item.name}</h3>
+                    <div className="min-w-0">
+                      <h3 className="font-bold text-neutral-900 text-sm sm:text-base truncate">{item.nameBn || item.name}</h3>
                       <p className="text-xs text-neutral-500">{formatUnit(item.unit)}</p>
                     </div>
                   </div>
@@ -154,7 +157,7 @@ export default function ProductPage() {
             <h2 className="text-lg font-bold text-neutral-900">সব পণ্য</h2>
             <p className="text-xs text-neutral-500">দৈনিক বাজার দর ও প্রতিটি পণ্যের লাইভ আপডেট</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {products.map((item, index) => {
               const parsed = parseChange(item);
               return (
@@ -165,8 +168,8 @@ export default function ProductPage() {
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">{item.image}</span>
-                    <div>
-                      <h3 className="font-bold text-neutral-900 text-sm sm:text-base">{item.nameBn || item.name}</h3>
+                    <div className="min-w-0">
+                      <h3 className="font-bold text-neutral-900 text-sm sm:text-base truncate">{item.nameBn || item.name}</h3>
                       <p className="text-xs text-neutral-500">{formatUnit(item.unit)}</p>
                     </div>
                   </div>

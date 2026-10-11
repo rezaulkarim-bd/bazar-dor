@@ -1,29 +1,3 @@
-// import Link from "next/link";
-// import { cacheLife } from "next/cache";
-
-// const NavLinks = async() => {
-//   "use cache";
-//   cacheLife("hours");
-
-//   const res = await fetch("https://api.abcz.workers.dev/api/bazardor/categories");
-//   const data = await res.json();
-
-//   return (
-//     <div className="flex gap-5 py-3 px-6 md:px-12 overflow-x-auto whitespace-nowrap">
-//       {
-//         data.map((n, i) => (
-//           <Link key={i} href={`/Category/${n.slug}`} className="flex items-center gap-1.5 text-sm font-medium text-neutral-700 hover:text-emerald-600 transition-colors">
-//             <span>{n.icon}</span>
-//             <span>{n.nameBn}</span>
-//           </Link>
-//         ))
-//       }
-//     </div>
-//   );
-// };
-
-// export default NavLinks;
-
 import Link from "next/link";
 import { cacheLife } from "next/cache";
 
@@ -50,12 +24,12 @@ const NavLinks = async () => {
   }
 
   return (
-    <div className="flex gap-5 py-3 px-6 md:px-12 overflow-x-auto whitespace-nowrap">
+    <div className="flex gap-4 sm:gap-6 py-3 px-4 sm:px-6 lg:px-12 overflow-x-auto whitespace-nowrap scrollbar-none border-b border-neutral-100 bg-white">
       {data.map((n, i) => (
         <Link
           key={n.slug || i}
           href={`/Category/${n.slug}`}
-          className="flex items-center gap-1.5 text-sm font-medium text-neutral-700 hover:text-emerald-600 transition-colors"
+          className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-neutral-700 hover:text-emerald-600 transition-colors shrink-0"
         >
           <span>{n.icon}</span>
           <span>{n.nameBn}</span>

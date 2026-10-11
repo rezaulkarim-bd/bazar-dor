@@ -1,18 +1,18 @@
 import Image from "next/image";
-import Link from "next/link"; // Link কম্পোনেন্ট সঠিকভাবে ইমপোর্ট করা থাকতে হবে
+import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="w-full bg-[#f4f7f4] py-8 sm:py-12">
-      <div className="max-w-6xl mx-auto px-4">
+    <section className="w-full bg-[#f4f7f4] py-6 sm:py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
         <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-10 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-8">
           
-          <div className="flex flex-col items-start text-left space-y-4 max-w-xl">
+          <div className="flex flex-col items-start text-left space-y-4 max-w-xl w-full">
             <span className="inline-block px-3.5 py-1 text-xs sm:text-sm font-semibold text-emerald-800 bg-emerald-100/80 rounded-full">
               রবিবার, ১১ অক্টোবর, ২০২৬
             </span>
 
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-neutral-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-neutral-900 tracking-tight leading-tight">
               আজকের বাজারের দাম এক নজরে
             </h1>
 
@@ -31,12 +31,12 @@ export default function Hero() {
           </div>
 
           <div className="flex-shrink-0 w-full lg:w-auto flex justify-center">
-            <div className="w-64 sm:w-80 lg:w-96 h-auto">
+            <div className="w-48 sm:w-64 lg:w-80 h-auto">
               <Image
                 src={"/bazar-hero.png"}
                 alt="বাজারের পণ্যের ঝুড়ি"
-                height={50}
-                width={50}
+                height={200}
+                width={200}
                 className="w-full h-full object-contain"
               />
             </div>

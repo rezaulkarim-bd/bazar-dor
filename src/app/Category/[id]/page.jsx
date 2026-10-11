@@ -1,8 +1,15 @@
 "use client";
 
+
+
+
+
+
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import ProductSkeleton from "@/app/components/ProductSkeleton";
+
 
 export default function CategoryPage() {
   const params = useParams();
@@ -12,7 +19,6 @@ export default function CategoryPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // সর্ট করার জন্য লোকাল স্টেট
   const [currentSort, setCurrentSort] = useState("default");
 
   useEffect(() => {
@@ -22,11 +28,9 @@ export default function CategoryPage() {
       try {
         setLoading(true);
         
-        // ১. ক্যাটাগরি তথ্য ফেচ করা
         const res = await fetch(`https://openapi.programming-hero.com/api/bazardor/categories/${id}`);
         const catJson = await res.json().catch(() => null);
 
-        // ২. সব পণ্য ফেচ করে ক্যাটাগরি অনুযায়ী ফিল্টার করা
         const prodRes = await fetch(`https://openapi.programming-hero.com/api/bazardor/products`);
         const prodJson = await prodRes.json().catch(() => []);
         const allProducts = Array.isArray(prodJson) ? prodJson : (prodJson.items || prodJson.data || []);
@@ -57,12 +61,10 @@ export default function CategoryPage() {
   const categoryName = categoryData?.nameBn || categoryData?.name || products[0]?.categoryNameBn || "পণ্যের তালিকা";
   const categoryIcon = categoryData?.icon || categoryData?.categoryIcon || products[0]?.categoryIcon || "🛒";
 
-  // সর্টিং অপশন পরিবর্তন হ্যান্ডেল করা (লোকালি স্টেট আপডেট হবে)
   const handleSortChange = (e) => {
     setCurrentSort(e.target.value);
   };
 
-  // পণ্যের দামের ওপর ভিত্তি করে সঠিকভাবে সর্ট করা
   const sortedProducts = [...products].sort((a, b) => {
     const getPrice = (item) => {
       const val = item.today || item.price || item.todayPrice || 0;
@@ -79,10 +81,9 @@ export default function CategoryPage() {
     } else if (currentSort === "high-low") {
       return priceB - priceA;
     }
-    return 0; // ডিফল্ট
+    return 0;
   });
 
-  // যদি ক্যাটাগরি বা পণ্য না থাকে (Invalid slug / Empty state)
   if (!loading && products.length === 0 && !categoryData?.name) {
     return (
       <div className="min-h-screen bg-[#f4f7f4] flex flex-col items-center justify-center p-4">
@@ -106,14 +107,19 @@ export default function CategoryPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f4f7f4] flex items-center justify-center text-neutral-500 text-sm">
-        লোড হচ্ছে...
+      <div className="min-h-screen bg-[#f4f7f4] py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto space-y-6">
+          <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+            <div className="h-8 w-48 bg-neutral-200 rounded animate-pulse"></div>
+          </div>
+          <ProductSkeleton />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f4f7f4] py-8 px-4 sm:px-8">
+    <div className="min-h-screen bg-[#f4f7f4] py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-6">
 
         {/* ক্যাটাগরি হেডার সেকশন */}

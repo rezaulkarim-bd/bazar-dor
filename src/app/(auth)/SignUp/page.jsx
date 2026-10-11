@@ -78,8 +78,8 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="w-full bg-[#f4f7f4] py-12 px-4 flex justify-center items-center min-h-screen">
-      <div className="max-w-md w-full bg-white border border-neutral-200 rounded-3xl p-8 sm:p-10 shadow-sm">
+    <div className="w-full bg-[#f4f7f4] py-8 sm:py-12 px-4 sm:px-6 flex justify-center items-center min-h-screen">
+      <div className="max-w-md w-full bg-white border border-neutral-200 rounded-3xl p-6 sm:p-10 shadow-sm">
         <div className="text-center mb-6">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight mb-2">
             অ্যাকাউন্ট তৈরি করুন
