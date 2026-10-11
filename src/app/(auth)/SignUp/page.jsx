@@ -13,47 +13,45 @@ import {
 } from "@heroui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 const SignUpPage = () => {
   const router = useRouter();
+  
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const dataObj = Object.fromEntries(formData.entries());
 
-    const { name, email, password, confirmPassword } = dataObj;
-
-    // পাসওয়ার্ড ম্যাচ করছে কিনা তা যাচাই
     if (password !== confirmPassword) {
       toast.error("পাসওয়ার্ড ও পাসওয়ার্ড নিশ্চিতকরণ মিলছে না!");
       return;
     }
 
     try {
-      const response = await authClient.signUp.email({
-        name: String(name),
-        email: String(email),
-        password: String(password),
+      const result = await authClient.signUp.email({
+        name,
+        email,
+        password,
         callbackURL: "/signin",
       });
 
-      console.log("Full Auth Response:", response); // ডিবাগ করার জন্য
+      console.log("Signup Response:", result);
 
-      if (response.error) {
-        const errorMsg = response.error.message || response.error.statusText || "সাইন আপ ব্যর্থ হয়েছে!";
-        toast.error(errorMsg);
+      if (result?.error) {
+        toast.error(result.error.message || "সাইন আপ ব্যর্থ হয়েছে!");
         return;
       }
 
-      if (response.data) {
-        toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে! অনুগ্রহ করে সাইন ইন করুন।");
-        router.push("/signin");
-      }
+      toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!");
+      router.push("/signin");
     } catch (err) {
-      console.error("Catch Exception:", err);
-      toast.error("একটি অনাকাঙ্ক্ষিত এরর ঘটেছে!");
+      console.error("Signup Catch Error:", err);
+      toast.error(err?.message || "সার্ভারে সংযোগ স্থাপন করা যাচ্ছে না!");
     }
   };
 
@@ -64,7 +62,7 @@ const SignUpPage = () => {
         callbackURL: "/",
       });
     } catch (err) {
-      toast.error("গুগল সাইন-ইন ব্যর্থ হয়েছে!");
+      toast.error("গুগল সাইন-ইন ব্যর্থ হয়েছে!");
     }
   };
 
@@ -75,7 +73,7 @@ const SignUpPage = () => {
         callbackURL: "/",
       });
     } catch (err) {
-      toast.error("গিটহব সাইন-ইন ব্যর্থ হয়েছে!");
+      toast.error("গিটহব সাইন-ইন ব্যর্থ হয়েছে!");
     }
   };
 
@@ -94,20 +92,13 @@ const SignUpPage = () => {
         <Form onSubmit={onSubmit}>
           <Fieldset>
             <FieldGroup className="space-y-4">
-              <TextField
-                isRequired
-                name="name"
-                validate={(value) => {
-                  if (value.length < 3) {
-                    return "নাম অন্তত ৩ অক্ষরের হতে হবে";
-                  }
-                  return null;
-                }}
-              >
+              <TextField isRequired name="name">
                 <Label className="block text-xs sm:text-sm font-semibold text-neutral-800 mb-1">
                   নাম
                 </Label>
                 <Input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="যেমন: রহিম উদ্দিন"
                   className="w-full px-4 py-2.5 rounded-xl border border-neutral-300 bg-white text-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all placeholder:text-neutral-400"
                 />
@@ -119,43 +110,34 @@ const SignUpPage = () => {
                   ইমেল
                 </Label>
                 <Input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   className="w-full px-4 py-2.5 rounded-xl border border-neutral-300 bg-white text-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all placeholder:text-neutral-400"
                 />
                 <FieldError className="text-xs text-rose-500 mt-1" />
               </TextField>
 
-              <TextField
-                isRequired
-                minLength={8}
-                name="password"
-                type="password"
-                validate={(value) => {
-                  if (value.length < 8) {
-                    return "পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে";
-                  }
-                  return null;
-                }}
-              >
+              <TextField isRequired name="password" type="password">
                 <Label className="block text-xs sm:text-sm font-semibold text-neutral-800 mb-1">
                   পাসওয়ার্ড
                 </Label>
                 <Input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="কমপক্ষে ৮ অক্ষর"
                   className="w-full px-4 py-2.5 rounded-xl border border-neutral-300 bg-white text-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all placeholder:text-neutral-400"
                 />
                 <FieldError className="text-xs text-rose-500 mt-1" />
               </TextField>
 
-              <TextField
-                isRequired
-                name="confirmPassword"
-                type="password"
-              >
+              <TextField isRequired name="confirmPassword" type="password">
                 <Label className="block text-xs sm:text-sm font-semibold text-neutral-800 mb-1">
                   পাসওয়ার্ড নিশ্চিত করুন
                 </Label>
                 <Input
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="আবার লিখুন"
                   className="w-full px-4 py-2.5 rounded-xl border border-neutral-300 bg-white text-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all placeholder:text-neutral-400"
                 />
@@ -166,7 +148,7 @@ const SignUpPage = () => {
             <Fieldset.Actions className="pt-4">
               <Button
                 type="submit"
-                className="w-full rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white shadow-md hover:bg-emerald-700 transition-all text-center"
+                className="w-full rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white shadow-md hover:bg-emerald-700 transition-all text-center cursor-pointer"
               >
                 অ্যাকাউন্ট তৈরি করুন
               </Button>
@@ -186,14 +168,14 @@ const SignUpPage = () => {
           <Button
             onClick={handleGoogleSignIn}
             type="button"
-            className="w-full flex items-center justify-center gap-2 rounded-xl border border-neutral-300 bg-white py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-all shadow-sm"
+            className="w-full flex items-center justify-center gap-2 rounded-xl border border-neutral-300 bg-white py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-all shadow-sm cursor-pointer"
           >
             <span>Google দিয়ে চালিয়ে যান</span>
           </Button>
           <Button
             onClick={handleGithubSignIn}
             type="button"
-            className="w-full flex items-center justify-center gap-2 rounded-xl border border-neutral-300 bg-white py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-all shadow-sm"
+            className="w-full flex items-center justify-center gap-2 rounded-xl border border-neutral-300 bg-white py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-all shadow-sm cursor-pointer"
           >
             <span>GitHub দিয়ে চালিয়ে যান</span>
           </Button>
@@ -202,7 +184,7 @@ const SignUpPage = () => {
         <p className="text-xs sm:text-sm text-neutral-600 mt-6 text-center">
           অ্যাকাউন্ট আছে?{" "}
           <Link
-            href="/signin"
+            href="/SignIn"
             className="text-emerald-700 font-semibold hover:underline"
           >
             সাইন ইন করুন
