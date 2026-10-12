@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 
 const getProductDetail = async (productId) => {
@@ -26,8 +27,9 @@ const formatUnit = (unit) => {
     return unit;
 };
 
-export default async function ProductDetailPage({ params }) {
-  const { productId } = await params;
+async function ProductDetailContent({ params }) {
+  const resolvedParams = await params;
+  const productId = resolvedParams?.productId;
   const rawProduct = await getProductDetail(productId);
 
   if (!rawProduct) {
@@ -53,7 +55,9 @@ export default async function ProductDetailPage({ params }) {
 
   const changeObj = rawProduct.change || {};
   const isUp = changeObj.dir === "up" || changeObj.dir === "+";
-  const changeText = `${isUp ? "▲" : "▼"} ${changeObj.pct || 0}%`;
+  const pctValue = changeObj.pct || 0;
+  const diffValue = changeObj.diff || changeObj.amount || Math.abs(Number(pctValue)) || 0;
+  const changeText = `${isUp ? "▲" : "▼"} ${pctValue}%`;
 
   const markets = Array.isArray(rawProduct.markets) ? rawProduct.markets : [];
   
@@ -77,11 +81,12 @@ export default async function ProductDetailPage({ params }) {
 
   const product = {
     name: rawProduct.nameBn || rawProduct.name,
-    category: rawProduct.categoryNameBn || rawProduct.category || "বাজারের পণ্য",
+    category: rawProduct.categoryNameBn || rawProduct.category || "অন্যান্য",
     unit: formatUnit(rawProduct.unit),
     image: rawProduct.image || "🛒",
-    todayPrice: `${rawProduct.today || 0} টাকা`,
+    todayPrice: `${rawProduct.today || 0}`,
     changeText: changeText,
+    diffValue: diffValue,
     isUp: isUp,
     minPrice: `${overallMin} টাকা`,
     minMarket: minMarketName,
@@ -101,8 +106,7 @@ export default async function ProductDetailPage({ params }) {
   return (
     <div className="min-h-screen bg-[#f4f7f4] py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-6">
-        
-        {/* Breadcrumb */}
+      
         <nav className="text-xs sm:text-sm text-neutral-500 flex items-center gap-2 overflow-x-auto whitespace-nowrap">
           <Link href="/" className="hover:underline">হোম</Link>
           <span>›</span>
@@ -111,36 +115,34 @@ export default async function ProductDetailPage({ params }) {
           <span className="text-neutral-800 font-semibold">{product.name}</span>
         </nav>
 
-        {/* Top Summary Card */}
         <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex items-center gap-4 sm:gap-5">
-            <div className="w-16 h-16 sm:w-24 sm:h-24 bg-neutral-50 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl shadow-inner border border-neutral-100 shrink-0">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#f4f7f4] rounded-2xl flex items-center justify-center text-3xl sm:text-4xl shrink-0">
               {product.image}
             </div>
             <div>
               <h1 className="text-xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
                 {product.name}
               </h1>
-              <p className="text-xs sm:text-sm text-neutral-500 mt-0.5">
+              <p className="text-xs sm:text-sm text-neutral-400 mt-1 font-medium">
                 {product.unit} · {product.category}
               </p>
-              <p className="text-xs text-neutral-600 font-medium mt-2">
-                গতকালের তুলনায় আজ দাম <span className={product.isUp ? "text-emerald-600 font-bold" : "text-rose-600 font-bold"}>{product.isUp ? "বেড়েছে" : "কমেছে"}</span> {product.changeText}
+              <p className="text-xs text-neutral-500 font-medium mt-2">
+                গতকালকের তুলনায় আজ দাম {product.isUp ? "বেড়েছে" : "কমেছে"} · <span className={product.isUp ? "text-rose-600 font-bold" : "text-emerald-600 font-bold"}>{product.diffValue} টাকা</span>
               </p>
             </div>
           </div>
 
-          <div className="bg-neutral-50 border border-neutral-200 rounded-2xl px-6 py-4 text-center w-full md:w-auto min-w-[150px] shadow-2xs">
+          <div className="bg-[#f4f7f4] rounded-2xl px-8 py-5 text-center w-full md:w-auto min-w-[160px]">
             <p className="text-xs text-neutral-500 font-medium mb-1">আজকের দাম</p>
-            <p className="text-2xl sm:text-4xl font-extrabold text-neutral-900">{product.todayPrice}</p>
-            <p className="text-xs text-neutral-500 mt-0.5">টাকা / কেজি</p>
-            <p className={`text-xs font-bold mt-1 ${product.isUp ? 'text-emerald-600' : 'text-rose-600'}`}>
+            <p className="text-3xl sm:text-4xl font-black text-neutral-900">{product.todayPrice}</p>
+            <p className="text-xs text-neutral-400 font-medium mt-0.5">টাকা / কেজি</p>
+            <p className={`text-xs font-bold mt-2.5 ${product.isUp ? 'text-rose-600' : 'text-emerald-600'}`}>
               {product.changeText}
             </p>
           </div>
         </div>
 
-        {/* Price Summary */}
         <div className="space-y-3">
           <h2 className="text-lg font-bold text-neutral-900">দামের সারসংক্ষেপ</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -166,7 +168,6 @@ export default async function ProductDetailPage({ params }) {
           </div>
         </div>
 
-        {/* Market-wise Table */}
         <div className="bg-white border border-neutral-200 rounded-3xl p-4 sm:p-8 shadow-sm space-y-4">
           <h2 className="text-lg font-bold text-neutral-900">বাজারভিত্তিক আজকের দাম</h2>
           
@@ -208,6 +209,18 @@ export default async function ProductDetailPage({ params }) {
 
       </div>
     </div>
+  );
+}
+
+export default function ProductDetailPage({ params }) {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#f4f7f4] flex items-center justify-center text-neutral-600">
+        পণ্যের বিবরণ লোড হচ্ছে...
+      </div>
+    }>
+      <ProductDetailContent params={params} />
+    </Suspense>
   );
 }
 

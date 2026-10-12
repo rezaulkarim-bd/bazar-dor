@@ -37,18 +37,24 @@ const SignUpPage = () => {
         name,
         email,
         password,
-        callbackURL: "/signin",
+        callbackURL: "/",
       });
 
       console.log("Signup Response:", result);
 
       if (result?.error) {
-        toast.error(result.error.message || "সাইন আপ ব্যর্থ হয়েছে!");
+        const errorMsg = result.error.message || "";
+        if (errorMsg.toLowerCase().includes("already") || errorMsg.toLowerCase().includes("exists")) {
+          toast.error("এই ইমেইল দিয়ে ইতিমধ্যে অ্যাকাউন্ট রয়েছে! অনুগ্রহ করে সাইন ইন করুন।");
+          router.push("/SignIn");
+        } else {
+          toast.error(errorMsg || "সাইন আপ ব্যর্থ হয়েছে!");
+        }
         return;
       }
 
       toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!");
-      router.push("/signin");
+      router.push("/");
     } catch (err) {
       console.error("Signup Catch Error:", err);
       toast.error(err?.message || "সার্ভারে সংযোগ স্থাপন করা যাচ্ছে না!");

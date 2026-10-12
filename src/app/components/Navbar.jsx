@@ -7,7 +7,7 @@ export default function Header() {
   return (
     <div>
       <header className="w-full bg-white border-b border-gray-100 py-3 px-4 sm:px-6 lg:px-12 flex items-center justify-between">
-        {/* বাম পাশের লোগো ও টাইটেল */}
+       
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-50 rounded-xl flex items-center justify-center overflow-hidden border border-emerald-100 p-1.5 shadow-sm shrink-0">
             <Image 

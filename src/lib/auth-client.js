@@ -5,8 +5,3 @@ export const authClient = createAuthClient({
 })
 
 
-// import { createAuthClient } from "better-auth/react";
-
-// export const authClient = createAuthClient({
-//   // baseURL ফাকা রাখলে এটি স্বয়ংক্রিয়ভাবে ক্লায়েন্ট সাইডে রিকোয়েস্ট হ্যান্ডল করতে পারে
-// });

@@ -13,7 +13,7 @@ const UserInfo = () => {
   const dropdownRef = useRef(null);
   const router = useRouter();
 
-  // বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হয়ে যাবে
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -38,7 +38,7 @@ const UserInfo = () => {
     <div className="relative" ref={dropdownRef}>
       {user ? (
         <div>
-          {/* ইউজার প্রোফাইল বাটন ও ড্রপডাউন অ্যারো */}
+        
           <button 
             onClick={() => setIsOpen(!isOpen)}
             className="flex items-center gap-2 group cursor-pointer focus:outline-none"
@@ -47,6 +47,8 @@ const UserInfo = () => {
               <Image 
                 src={user.image} 
                 alt={user.name || "User"} 
+                 width={40} 
+                 height={40} 
                 className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border border-neutral-200 shadow-sm"
               />
             ) : (
@@ -62,7 +64,7 @@ const UserInfo = () => {
             </span>
           </button>
 
-          {/* ড্রপডাউন পপআপ মেনু */}
+
           {isOpen && (
             <div className="absolute right-0 mt-2 w-64 bg-white border border-neutral-200 rounded-2xl shadow-xl py-3 px-4 z-50 space-y-3">
               <div className="border-b border-neutral-100 pb-3">

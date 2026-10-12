@@ -77,7 +77,7 @@ export default function ProductPage() {
     <div className="min-h-screen bg-[#f4f7f4] py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-10">
 
-        {/* Section A — আজ দাম বেড়েছে ▲ */}
+       
         <div className="space-y-4">
           <h2 className="text-lg font-bold text-neutral-900 flex items-center gap-2">
             <span className="text-emerald-600">▲</span> আজ দাম বেড়েছে
@@ -114,7 +114,7 @@ export default function ProductPage() {
           </div>
         </div>
 
-        {/* Section B — আজ দাম কমেছে ▼ */}
+        
         <div className="space-y-4">
           <h2 className="text-lg font-bold text-neutral-900 flex items-center gap-2">
             <span className="text-rose-600">▼</span> আজ দাম কমেছে
@@ -151,7 +151,7 @@ export default function ProductPage() {
           </div>
         </div>
 
-        {/* Section C — সব পণ্য */}
+       
         <div id="all-products" className="space-y-4">
           <div>
             <h2 className="text-lg font-bold text-neutral-900">সব পণ্য</h2>

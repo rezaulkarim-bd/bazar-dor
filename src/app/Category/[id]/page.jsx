@@ -1,17 +1,11 @@
 "use client";
 
-
-
-
-
-
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useParams } from "next/navigation";
 import ProductSkeleton from "@/app/components/ProductSkeleton";
 
-
-export default function CategoryPage() {
+function CategoryContent() {
   const params = useParams();
   const id = params?.id;
 
@@ -122,7 +116,6 @@ export default function CategoryPage() {
     <div className="min-h-screen bg-[#f4f7f4] py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-6">
 
-        {/* ক্যাটাগরি হেডার সেকশন */}
         <div className="bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
@@ -139,7 +132,6 @@ export default function CategoryPage() {
           </div>
         </div>
 
-        {/* পণ্যের সংখ্যা ও সর্ট কন্ট্রোল */}
         <div className="flex items-center justify-between text-xs sm:text-sm text-neutral-600 px-1">
           <p>মোট {sortedProducts.length}টি পণ্য দেখানো হচ্ছে</p>
           <div className="flex items-center gap-2">
@@ -156,7 +148,6 @@ export default function CategoryPage() {
           </div>
         </div>
 
-        {/* পণ্যের রেসপনসিভ গ্রিড কার্ড */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {sortedProducts.length > 0 ? (
             sortedProducts.map((item, index) => (
@@ -195,5 +186,13 @@ export default function CategoryPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function CategoryPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#f4f7f4] flex items-center justify-center text-neutral-600">লোড হচ্ছে...</div>}>
+      <CategoryContent />
+    </Suspense>
   );
 }
